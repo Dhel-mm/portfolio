@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Margie A. Marquez | IT Student &amp; Aspiring Web Developer Portfolio</title>
+  <meta name="description" content="Portfolio of Margie A. Marquez, a third-year Information Technology student at City College of Calamba, Laguna. Web development, networking, system administration and graphic design projects.">
+  <meta name="keywords" content="Margie Marquez, IT student, web developer, portfolio, City College of Calamba, Laguna, networking, graphic design">
+  <meta name="author" content="Margie A. Marquez">
+  <meta name="robots" content="index, follow">
+  <!-- TODO: replace with the real URL after deployment -->
+  <link rel="canonical" href="https://dhel-mm.github.io/portfolio/">
+
+  <!-- Open Graph / social sharing preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Margie A. Marquez | IT Student &amp; Aspiring Web Developer">
+  <meta property="og:description" content="Skills, projects, experience and CV of Margie A. Marquez, Information Technology student from Calamba City, Laguna.">
+  <meta property="og:url" content="https://dhel-mm.github.io/portfolio/">
+  <meta property="og:image" content="https://dhel-mm.github.io/portfolio/assets/images/og-preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="theme-color" content="#1b2340">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%235a2a12'/><text x='32' y='42' font-family='Georgia,serif' font-size='30' font-weight='700' fill='%23fff' text-anchor='middle'>mm</text></svg>">
+
+  <!-- Fonts & icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,600;1,700&family=Press+Start+2P&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <link rel="stylesheet" href="style.css">
+  <!-- Intro: hide the page until script.js shows the intro (once per visit), so it never flashes first.
+       The timer is only a safety net in case script.js fails to load. -->
+  <script>try{if(!sessionStorage.getItem("introSeen")&&!matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("intro-pending");setTimeout(function(){document.documentElement.classList.remove("intro-pending")},15000)}}catch(e){}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Moving sky background (sunrise, midday, sunset, midnight) -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky-layer" data-phase="0"></div>
+    <div class="sky-layer" data-phase="1"></div>
+    <div class="sky-layer" data-phase="2"></div>
+    <div class="sky-layer" data-phase="3"></div>
+    <div class="sky-shade"></div>
+  </div>
+
+  <!-- Header / navigation -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="#home" aria-label="Margie Marquez, back to top">
+        <span class="logo-mark">mm<span class="logo-dot">.</span></span>
+        <span class="logo-text">Margie Marquez<small>Personal Portfolio</small></span>
+      </a>
+
+      <nav class="nav glass" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#cv">CV</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <div class="bg-picker">
+          <button class="icon-btn glass" id="bg-btn" type="button" aria-label="Choose background" aria-haspopup="true" aria-expanded="false" aria-controls="bg-menu">
+            <i class="fa-solid fa-image" aria-hidden="true"></i>
+          </button>
+          <div class="bg-menu glass" id="bg-menu" role="group" aria-labelledby="bg-menu-title" hidden>
+            <p class="bg-menu-title" id="bg-menu-title">Background</p>
+            <button type="button" class="bg-option" data-bg="plain" aria-pressed="false">
+              <span class="bg-swatch bg-swatch-plain" aria-hidden="true"></span>
+              <span><strong>Plain</strong><small>Simple, calm background</small></span>
+            </button>
+            <button type="button" class="bg-option" data-bg="landscape" aria-pressed="false">
+              <span class="bg-swatch bg-swatch-landscape" aria-hidden="true"></span>
+              <span><strong>Landscape</strong><small>Animated sky and grass field</small></span>
+            </button>
+            <button type="button" class="bg-option" data-bg="pixels" aria-pressed="true">
+              <span class="bg-swatch bg-swatch-pixels" aria-hidden="true"></span>
+              <span><strong>Pixels</strong><small>Voxel meadow, square sun</small></span>
+            </button>
+          </div>
+        </div>
+        <button class="icon-btn glass" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        </button>
+        <button class="icon-btn glass menu-btn" id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+          <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HOME -->
+    <section class="hero section" id="home">
+      <div class="container hero-grid">
+        <div class="hero-text glass reveal">
+          <p class="eyebrow">Hello, I'm</p>
+          <h1 class="hero-name">Margie A. <span>Marquez</span></h1>
+          <p class="hero-title">IT student &amp; aspiring web developer</p>
+          <p class="hero-intro">
+            Exploring the connection between technology and creativity.
+            Learning one project at a time, and building toward a better future.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#projects"><i class="fa-solid fa-folder-open" aria-hidden="true"></i> View my projects</a>
+            <a class="btn" href="assets/cv/Margie-Marquez-CV.pdf" download><i class="fa-solid fa-download" aria-hidden="true"></i> Download CV</a>
+            <a class="btn" href="#contact"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Contact me</a>
+          </div>
+        </div>
+
+        <div class="hero-side reveal">
+          <!-- 3D photo card: tilts with the pointer; click / tap flips it to show the tagline -->
+          <button class="profile3d" id="profile3d" type="button" aria-pressed="false" aria-label="Show Margie's tagline">
+            <span class="profile3d-tilt">
+              <span class="profile3d-flip">
+                <span class="profile3d-face profile3d-front">
+                  <span class="profile3d-backdrop" aria-hidden="true"></span>
+                  <img class="profile3d-person" src="assets/images/profile-cutout.webp" width="720" height="924" fetchpriority="high" decoding="async"
+                       alt="Portrait of Margie A. Marquez in a black blazer and white blouse">
+                  <span class="profile3d-shine" aria-hidden="true"></span>
+                  <span class="profile3d-caption">
+                    <strong>Margie A. Marquez</strong>
+                    <span>3rd Year IT Student</span>
+                  </span>
+                </span>
+                <span class="profile3d-face profile3d-back" aria-hidden="true">
+                  <i class="fa-solid fa-quote-left profile3d-quote-mark"></i>
+                  <span class="profile3d-quote">
+                    <span style="--i: 0">If today you fail,</span>
+                    <span style="--i: 1">tomorrow you rise.</span>
+                    <span style="--i: 2">And if you fall again,</span>
+                    <span style="--i: 3">there's always another day to try.</span>
+                  </span>
+                  <span class="profile3d-sign" style="--i: 4">— Margie</span>
+                  <span class="profile3d-back-hint">Tap to flip back</span>
+                </span>
+              </span>
+            </span>
+          </button>
+          <p class="profile3d-hint" id="profile3d-hint" aria-hidden="true">
+            <i class="fa-solid fa-hand-pointer" aria-hidden="true"></i> Tap my photo
+          </p>
+          <p class="sr-only" id="profile3d-live" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="container">
+        <h2 class="section-title reveal">About me</h2>
+        <div class="about-grid">
+          <div class="about-bio glass reveal">
+            <p class="lead">
+              I'm Margie, a third-year Information Technology student who enjoys making sense of ideas
+              and turning them into something useful.
+            </p>
+            <p>
+              I was born on October 29, 2006, and I live in Barangay Palo-Alto, Calamba City, Laguna.
+              I am currently studying Information Technology at City College of Calamba, where I am
+              building a strong foundation in web development, networking and system administration.
+            </p>
+            <p>
+              One of my strengths is my ability to analyze and understand problems. Whether it's a
+              network layout, a block of code or a design brief, I like to study how things work,
+              break complex tasks into smaller steps, and work through them patiently until I find
+              a solution.
+            </p>
+            <p>
+              Right now, I am focused on improving my coding skills through coursework, personal
+              practice and hands-on projects. I have also created graphic design work in Photoshop,
+              including coffee shop artwork, a typography poster and my own logo variations, which
+              taught me how to communicate ideas visually.
+            </p>
+            <p>
+              I value patience, clear communication and the willingness to learn from feedback.
+              My goal is to keep growing in IT, contribute to meaningful projects, and use what
+              I learn to build a better future for myself and the people around me.
+            </p>
+
+            <div class="after-class">
+              <h3>Off the screen &amp; after class</h3>
+              <ul class="chip-list">
+                <li class="chip"><i class="fa-solid fa-gamepad" aria-hidden="true"></i> Playing video games</li>
+                <li class="chip"><i class="fa-solid fa-film" aria-hidden="true"></i> Watching dramas &amp; movies</li>
+                <li class="chip"><i class="fa-solid fa-palette" aria-hidden="true"></i> Graphic design</li>
+              </ul>
+            </div>
+          </div>
+
+          <aside class="basics glass reveal" aria-labelledby="basics-title">
+            <h3 id="basics-title">The basics</h3>
+            <dl>
+              <div><dt>Full name</dt><dd>Margie A. Marquez</dd></div>
+              <div><dt>Professional title</dt><dd>IT student &amp; aspiring web developer</dd></div>
+              <div><dt>Location</dt><dd>Barangay Palo-Alto, Calamba City, 4027 Laguna, Philippines</dd></div>
+              <div><dt>Email</dt><dd><a href="mailto:margiemarquez71@gmail.com">margiemarquez71@gmail.com</a></dd></div>
+              <div><dt>Contact number</dt><dd><a href="tel:+639551778760">0955 177 8760</a></dd></div>
+              <div><dt>Education</dt><dd>Information Technology, 3rd year<br>City College of Calamba</dd></div>
+              <div><dt>Current occupation</dt><dd>Student</dd></div>
+              <div><dt>Experience</dt><dd>Academic and personal projects (student)</dd></div>
+              <div><dt>Specialization</dt><dd>Web development, system administration, networking and graphic design</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+      <div class="container">
+        <h2 class="section-title reveal">My Skills</h2>
+        <div class="skills-panel glass reveal">
+          <div class="skills-head">
+            <h3>Technical skills</h3>
+            <p class="level-key" aria-label="Skill level key">
+              <span><b class="dot l1"></b>Beginner</span>
+              <span><b class="dot l2"></b>Developing</span>
+              <span><b class="dot l3"></b>Proficient</span>
+            </p>
+          </div>
+          <!-- data-level: 1 = Beginner, 2 = Developing, 3 = Proficient (self-assessed) -->
+          <ul class="skill-grid">
+            <li class="skill" data-level="1"><i class="fa-solid fa-server" aria-hidden="true"></i><span>System Administration</span></li>
+            <li class="skill" data-level="2"><i class="fa-brands fa-windows" aria-hidden="true"></i><span>Windows Server</span></li>
+            <li class="skill" data-level="2"><i class="fa-solid fa-network-wired" aria-hidden="true"></i><span>Network Configuration</span></li>
+            <li class="skill" data-level="2"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i><span>Hardware Troubleshooting</span></li>
+            <li class="skill" data-level="2"><i class="fa-solid fa-code" aria-hidden="true"></i><span>Web Development</span></li>
+            <li class="skill" data-level="2"><i class="fa-brands fa-html5" aria-hidden="true"></i><span>HTML</span></li>
+            <li class="skill" data-level="2"><i class="fa-brands fa-css3-alt" aria-hidden="true"></i><span>CSS</span></li>
+            <li class="skill" data-level="1"><i class="fa-brands fa-js" aria-hidden="true"></i><span>JavaScript</span></li>
+            <li class="skill" data-level="1"><i class="fa-solid fa-database" aria-hidden="true"></i><span>MySQL</span></li>
+            <li class="skill" data-level="2"><i class="fa-brands fa-github" aria-hidden="true"></i><span>Git/GitHub</span></li>
+          </ul>
+
+          <div class="skills-head">
+            <h3>Professional skills</h3>
+          </div>
+          <ul class="skill-grid">
+            <li class="skill" data-level="2"><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i><span>Problem Solving</span></li>
+            <li class="skill" data-level="1"><i class="fa-solid fa-list-check" aria-hidden="true"></i><span>Project Management</span></li>
+            <li class="skill" data-level="2"><i class="fa-solid fa-comments" aria-hidden="true"></i><span>Communication</span></li>
+            <li class="skill" data-level="2"><i class="fa-solid fa-people-group" aria-hidden="true"></i><span>Team Collaboration</span></li>
+            <li class="skill" data-level="2"><i class="fa-solid fa-file-lines" aria-hidden="true"></i><span>Technical Documentation</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects">
+      <div class="container">
+        <h2 class="section-title reveal">My Projects</h2>
+
+        <form class="project-toolbar glass reveal" id="project-filters" role="search" onsubmit="return false">
+          <div class="search-field">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <label class="sr-only" for="project-search">Search projects</label>
+            <input type="search" id="project-search" placeholder="Search by name, technology, category, year or type…" autocomplete="off">
+          </div>
+          <div class="filter-row">
+            <label>
+              <span>Category</span>
+              <select id="filter-category"><option value="">All categories</option></select>
+            </label>
+            <label>
+              <span>Type</span>
+              <select id="filter-type"><option value="">All types</option></select>
+            </label>
+            <label>
+              <span>Technology</span>
+              <select id="filter-tech"><option value="">All technologies</option></select>
+            </label>
+            <label>
+              <span>Year</span>
+              <select id="filter-year"><option value="">All years</option></select>
+            </label>
+            <button class="btn btn-small" type="reset" id="filter-reset"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Reset</button>
+          </div>
+        </form>
+
+        <p class="result-count" id="result-count" aria-live="polite"></p>
+        <div class="project-grid" id="project-grid"></div>
+        <div class="project-more glass" id="project-more" hidden>
+          <div class="pm-peek" id="pm-peek" aria-hidden="true"></div>
+          <p class="pm-text" id="pm-text"></p>
+          <button class="btn btn-primary btn-small" type="button" id="pm-toggle" aria-controls="project-grid" aria-expanded="false"></button>
+        </div>
+        <p class="empty-state glass" id="empty-state" hidden>
+          <i class="fa-regular fa-face-frown" aria-hidden="true"></i>
+          No projects match your search. Try another keyword or reset the filters.
+        </p>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="section" id="experience">
+      <div class="container">
+        <h2 class="section-title reveal">My Experience</h2>
+        <!-- TODO: confirm dates -->
+        <ol class="timeline">
+          <li class="timeline-item reveal">
+            <div class="timeline-card glass">
+              <p class="timeline-date">2024 – Present</p>
+              <h3>Student Web Developer</h3>
+              <p class="timeline-org">Personal &amp; Academic Projects · Calamba City, Laguna</p>
+              <ul>
+                <li>Created small web development projects using HTML, CSS, JavaScript and MySQL.</li>
+                <li>Used Git and GitHub to manage and publish project source code.</li>
+              </ul>
+              <p class="timeline-win"><i class="fa-solid fa-trophy" aria-hidden="true"></i> Built and launched my own small web projects online.</p>
+            </div>
+          </li>
+          <li class="timeline-item reveal">
+            <div class="timeline-card glass">
+              <p class="timeline-date">2024 – Present</p>
+              <h3>Networking Student</h3>
+              <p class="timeline-org">City College of Calamba · Cisco Networking Academy</p>
+              <ul>
+                <li>Use Cisco tools to configure and test computer networks.</li>
+                <li>Create and complete our class networking activities in Cisco.</li>
+              </ul>
+              <p class="timeline-win"><i class="fa-solid fa-trophy" aria-hidden="true"></i> Built practical skills in network configuration and troubleshooting.</p>
+            </div>
+          </li>
+          <li class="timeline-item reveal">
+            <div class="timeline-card glass">
+              <p class="timeline-date">Certification · July 2026</p>
+              <h3>NC II Holder: Computer Systems Servicing</h3>
+              <p class="timeline-org">TESDA · Philippines</p>
+              <ul>
+                <li>Prepared for and completed the competency assessment.</li>
+                <li>Core skills: installing and configuring computer systems, setting up networks and servers, and maintaining and repairing them.</li>
+              </ul>
+              <p class="timeline-win"><i class="fa-solid fa-trophy" aria-hidden="true"></i> Successfully passed the NC II assessment.</p>
+            </div>
+          </li>
+          <li class="timeline-item reveal">
+            <div class="timeline-card glass">
+              <p class="timeline-date">Senior High School</p>
+              <h3>HUMSS Student</h3>
+              <p class="timeline-org">Humanities and Social Sciences Strand</p>
+              <ul>
+                <li>Developed communication, research and writing skills.</li>
+                <li>Took part in group presentations and collaborative school projects.</li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="section" id="education">
+      <div class="container">
+        <h2 class="section-title reveal">My Education</h2>
+        <div class="edu-grid">
+          <div class="edu-col">
+            <h3 class="col-title"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Education</h3>
+            <article class="edu-card glass reveal">
+              <p class="edu-year">2024 – Present · 3rd Year</p>
+              <h4>Information Technology</h4>
+              <p class="edu-school">City College of Calamba</p>
+              <p class="edu-note">Focus: web development, networking and system administration</p>
+            </article>
+            <article class="edu-card glass reveal">
+              <p class="edu-year">Senior High School</p>
+              <h4>Humanities and Social Sciences (HUMSS)</h4>
+              <!-- TODO: add school name and year -->
+              <p class="edu-note">Academic track focused on communication, research and social sciences</p>
+            </article>
+          </div>
+          <div class="edu-col">
+            <h3 class="col-title"><i class="fa-solid fa-certificate" aria-hidden="true"></i> Credentials</h3>
+            <article class="edu-card glass reveal">
+              <p class="edu-year">Issued July 24, 2026 · Valid until July 23, 2031</p>
+              <h4>National Certificate II (NC II) in Computer Systems Servicing</h4>
+              <p class="edu-school">Technical Education and Skills Development Authority (TESDA)</p>
+              <p class="edu-note">Install and configure computer systems, set up computer networks and servers, and maintain and repair computer systems and networks.</p>
+              <div class="btn-row edu-actions">
+                <a class="btn btn-small" href="assets/certificates/NC-II-Computer-Systems-Servicing.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-certificate" aria-hidden="true"></i> View certificate</a>
+              </div>
+            </article>
+            <article class="edu-card glass reveal">
+              <p class="edu-year">Ongoing</p>
+              <h4>Cisco Networking Coursework</h4>
+              <p class="edu-school">Cisco Networking Academy</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CV -->
+    <section class="section" id="cv">
+      <div class="container">
+        <div class="cv-panel glass reveal">
+          <div>
+            <h2 class="section-title">My CV</h2>
+            <p>Get a one-page summary of my education, skills, projects and credentials.</p>
+          </div>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="assets/cv/Margie-Marquez-CV.pdf" download><i class="fa-solid fa-download" aria-hidden="true"></i> Download CV (PDF)</a>
+            <a class="btn" href="assets/cv/Margie-Marquez-CV.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i> View CV online</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact">
+      <div class="container">
+        <h2 class="section-title reveal">Contact me</h2>
+        <div class="contact-grid">
+          <div class="contact-info glass reveal">
+            <p class="lead">Have a project, an opportunity or a question? I'd love to hear from you.</p>
+            <ul class="contact-list">
+              <li><i class="fa-solid fa-envelope" aria-hidden="true"></i><a href="mailto:margiemarquez71@gmail.com">margiemarquez71@gmail.com</a></li>
+              <li><i class="fa-solid fa-phone" aria-hidden="true"></i><a href="tel:+639551778760">0955 177 8760</a></li>
+              <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Barangay Palo-Alto, Calamba City, 4027 Laguna, Philippines</span></li>
+              <li><i class="fa-brands fa-linkedin" aria-hidden="true"></i><a href="https://www.linkedin.com/in/margie-marquez-4" target="_blank" rel="noopener">linkedin.com/in/margie-marquez-4</a></li>
+              <li><i class="fa-brands fa-github" aria-hidden="true"></i><a href="https://github.com/Dhel-mm" target="_blank" rel="noopener">github.com/Dhel-mm</a></li>
+            </ul>
+          </div>
+
+          <form class="contact-form glass reveal" id="contact-form" novalidate>
+            <div class="field">
+              <label for="cf-name">Name</label>
+              <input id="cf-name" name="name" type="text" maxlength="80" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" name="email" type="email" maxlength="120" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="cf-subject">Subject</label>
+              <input id="cf-subject" name="subject" type="text" maxlength="120" required>
+            </div>
+            <div class="field">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" rows="5" maxlength="2000" required></textarea>
+            </div>
+            <!-- Spam trap: hidden from people, bots tend to fill it in -->
+            <div class="hp" aria-hidden="true">
+              <label for="cf-website">Website</label>
+              <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Send message</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner glass">
+      <div>
+        <p class="footer-name">Margie A. Marquez</p>
+        <p class="footer-title">IT student &amp; aspiring web developer</p>
+        <p class="footer-links">
+          <a href="mailto:margiemarquez71@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+          <a href="https://www.linkedin.com/in/margie-marquez-4" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+          <a href="https://github.com/Dhel-mm" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+        </p>
+      </div>
+      <nav aria-label="Footer">
+        <ul class="footer-nav">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#cv">CV</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="copyright">© <span id="year">2026</span> Margie A. Marquez. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Sky control: real-time or manual sunrise / midday / sunset / midnight -->
+  <div class="sky-control glass" id="sky-control">
+    <button class="sky-control-toggle" id="sky-toggle" type="button" aria-expanded="false" aria-controls="sky-panel" aria-label="Sky and theme settings">
+      <i class="fa-solid fa-sun" id="sky-icon" aria-hidden="true"></i>
+    </button>
+    <div class="sky-panel" id="sky-panel" hidden>
+      <div class="sky-panel-head">
+        <span>Sky &amp; theme</span>
+        <button class="live-btn" id="sky-live" type="button" aria-pressed="true">
+          <span class="live-dot"></span> Live <span id="sky-clock"></span>
+        </button>
+      </div>
+      <label class="sr-only" for="sky-range">Time of day</label>
+      <input type="range" id="sky-range" min="0" max="3" step="0.01" value="1">
+      <div class="sky-stops">
+        <button type="button" data-stop="0"><i class="fa-solid fa-cloud-sun" aria-hidden="true"></i>Sunrise</button>
+        <button type="button" data-stop="1"><i class="fa-solid fa-sun" aria-hidden="true"></i>Midday</button>
+        <button type="button" data-stop="2"><i class="fa-solid fa-cloud-moon" aria-hidden="true"></i>Sunset</button>
+        <button type="button" data-stop="3"><i class="fa-solid fa-moon" aria-hidden="true"></i>Midnight</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project details dialog -->
+  <dialog class="project-dialog glass" id="project-dialog" aria-labelledby="pd-title">
+    <button class="dialog-close" type="button" id="pd-close" aria-label="Close project details">
+      <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+    </button>
+    <div class="pd-body" id="pd-body"></div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>

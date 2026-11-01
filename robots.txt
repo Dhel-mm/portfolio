@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# TODO: update to the real URL after deployment
+Sitemap: https://dhel-mm.github.io/portfolio/sitemap.xml
