@@ -1,0 +1,7 @@
+# Kept off the public site (Vercel never uploads .git)
+README.md
+firebase.json
+.firebaserc
+.firebase
+firebase-debug.log
+assets/images/profile.webp

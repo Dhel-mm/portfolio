@@ -3,6 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Security: only this site and the services it uses may run scripts or load files
+       (blocks injected scripts / XSS). The sha256 is the start-up script below: if you
+       edit that script, update the hash (see README.md). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-tYiiuLVZOqbKuTG+ka19xGQU1BQ+ts4dSS8fumb+R3I=' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob:; connect-src 'self' https://formsubmit.co; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <script>
+/* 1. Clean URLs (/about, /projects/booksheaven) all show this page, so relative links
+      are anchored to the site's own folder however deep the address is.
+   2. Intro: hide the page until script.js shows the intro (once per visit), so it never
+      flashes first. The timer is only a safety net in case script.js fails to load. */
+(function () {
+  var m = location.pathname.match(/^(.*?\/)(?:index\.html|(?:about|skills|projects|experience|education|cv|contact|analytics)(?:\/[\w-]+)?\/?)?$/);
+  var base = document.createElement("base");
+  base.href = m ? m[1] : "/";
+  document.head.prepend(base);
+  try {
+    if (!sessionStorage.getItem("introSeen") && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("intro-pending");
+      setTimeout(function () { document.documentElement.classList.remove("intro-pending"); }, 15000);
+    }
+  } catch (e) {}
+})();
+  </script>
 
   <!-- SEO -->
   <title>Margie A. Marquez | IT Student &amp; Aspiring Web Developer Portfolio</title>
@@ -10,15 +32,14 @@
   <meta name="keywords" content="Margie Marquez, IT student, web developer, portfolio, City College of Calamba, Laguna, networking, graphic design">
   <meta name="author" content="Margie A. Marquez">
   <meta name="robots" content="index, follow">
-  <!-- TODO: replace with the real URL after deployment -->
-  <link rel="canonical" href="https://dhel-mm.github.io/portfolio/">
+  <link rel="canonical" href="https://margie-marquez.vercel.app/">
 
   <!-- Open Graph / social sharing preview -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Margie A. Marquez | IT Student &amp; Aspiring Web Developer">
   <meta property="og:description" content="Skills, projects, experience and CV of Margie A. Marquez, Information Technology student from Calamba City, Laguna.">
-  <meta property="og:url" content="https://dhel-mm.github.io/portfolio/">
-  <meta property="og:image" content="https://dhel-mm.github.io/portfolio/assets/images/og-preview.jpg">
+  <meta property="og:url" content="https://margie-marquez.vercel.app/">
+  <meta property="og:image" content="https://margie-marquez.vercel.app/assets/images/og-preview.jpg">
   <meta name="twitter:card" content="summary_large_image">
 
   <meta name="theme-color" content="#1b2340">
@@ -31,9 +52,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
   <link rel="stylesheet" href="style.css">
-  <!-- Intro: hide the page until script.js shows the intro (once per visit), so it never flashes first.
-       The timer is only a safety net in case script.js fails to load. -->
-  <script>try{if(!sessionStorage.getItem("introSeen")&&!matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("intro-pending");setTimeout(function(){document.documentElement.classList.remove("intro-pending")},15000)}}catch(e){}</script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -99,7 +117,7 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" tabindex="-1">
 
     <!-- HOME -->
     <section class="hero section" id="home">
@@ -108,6 +126,7 @@
           <p class="eyebrow">Hello, I'm</p>
           <h1 class="hero-name">Margie A. <span>Marquez</span></h1>
           <p class="hero-title">IT student &amp; aspiring web developer</p>
+          <p class="hero-tagline"><i class="fa-solid fa-quote-left" aria-hidden="true"></i> If today you fail, tomorrow you rise.</p>
           <p class="hero-intro">
             Exploring the connection between technology and creativity.
             Learning one project at a time, and building toward a better future.
@@ -209,7 +228,7 @@
               <div><dt>Contact number</dt><dd><a href="tel:+639551778760">0955 177 8760</a></dd></div>
               <div><dt>Education</dt><dd>Information Technology, 3rd year<br>City College of Calamba</dd></div>
               <div><dt>Current occupation</dt><dd>Student</dd></div>
-              <div><dt>Experience</dt><dd>Academic and personal projects (student)</dd></div>
+              <div><dt>Years of experience</dt><dd>2 years (since 2024) of academic and personal projects</dd></div>
               <div><dt>Specialization</dt><dd>Web development, system administration, networking and graphic design</dd></div>
             </dl>
           </aside>
@@ -263,7 +282,7 @@
       <div class="container">
         <h2 class="section-title reveal">My Projects</h2>
 
-        <form class="project-toolbar glass reveal" id="project-filters" role="search" onsubmit="return false">
+        <form class="project-toolbar glass reveal" id="project-filters" role="search">
           <div class="search-field">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
             <label class="sr-only" for="project-search">Search projects</label>
@@ -388,6 +407,7 @@
               <h4>National Certificate II (NC II) in Computer Systems Servicing</h4>
               <p class="edu-school">Technical Education and Skills Development Authority (TESDA)</p>
               <p class="edu-note">Install and configure computer systems, set up computer networks and servers, and maintain and repair computer systems and networks.</p>
+              <p class="edu-note">Credential ID (Certificate No.): 26043402026969</p>
               <div class="btn-row edu-actions">
                 <a class="btn btn-small" href="assets/certificates/NC-II-Computer-Systems-Servicing.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-certificate" aria-hidden="true"></i> View certificate</a>
               </div>
@@ -462,6 +482,35 @@
         </div>
       </div>
     </section>
+
+    <!-- SITE ANALYTICS: live visit counts (filled in by script.js, section 9) -->
+    <section class="section" id="analytics" aria-labelledby="analytics-title">
+      <div class="container">
+        <h2 class="section-title reveal" id="analytics-title">Site analytics</h2>
+        <p class="stats-intro reveal">How visitors use this portfolio, counted anonymously: no cookies and no personal data.</p>
+        <div class="stats-tiles reveal">
+          <div class="stat-tile glass"><p class="stat-label"><i class="fa-solid fa-eye" aria-hidden="true"></i> Page views</p><p class="stat-value" data-stat="TOTAL">–</p></div>
+          <div class="stat-tile glass"><p class="stat-label"><i class="fa-solid fa-download" aria-hidden="true"></i> CV downloads</p><p class="stat-value" data-stat="cv-download">–</p></div>
+          <div class="stat-tile glass"><p class="stat-label"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> CV views</p><p class="stat-value" data-stat="cv-view">–</p></div>
+          <div class="stat-tile glass"><p class="stat-label"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Messages sent</p><p class="stat-value" data-stat="contact-sent">–</p></div>
+        </div>
+        <div class="stats-grid">
+          <article class="stats-card glass reveal">
+            <h3 class="col-title"><i class="fa-solid fa-folder-open" aria-hidden="true"></i> Most viewed projects</h3>
+            <ol class="bar-list" id="stats-projects"></ol>
+          </article>
+          <article class="stats-card glass reveal">
+            <h3 class="col-title"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i> Most opened pages</h3>
+            <ol class="bar-list" id="stats-pages"></ol>
+          </article>
+          <article class="stats-card glass reveal">
+            <h3 class="col-title"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i> Visitors' devices</h3>
+            <ul class="bar-list" id="stats-devices"></ul>
+          </article>
+        </div>
+        <p class="stats-status" id="stats-status" role="status">Loading the latest numbers...</p>
+      </div>
+    </section>
   </main>
 
   <!-- FOOTER -->
@@ -486,9 +535,11 @@
           <li><a href="#education">Education</a></li>
           <li><a href="#cv">CV</a></li>
           <li><a href="#contact">Contact</a></li>
+          <li><a href="#analytics">Analytics</a></li>
         </ul>
       </nav>
-      <p class="copyright">© <span id="year">2026</span> Margie A. Marquez. All rights reserved.</p>
+      <p class="copyright">© <span id="year">2026</span> Margie A. Marquez. All rights reserved.
+        <span id="analytics-note" hidden>· Visits are counted anonymously, without cookies: <a href="#analytics">see the site analytics</a>.</span></p>
     </div>
   </footer>
 

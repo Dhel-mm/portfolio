@@ -7,12 +7,14 @@
    2b. Pixels          voxel meadow (three.js), same day cycle
    3. Time of day      sunrise/midday/sunset/midnight, light/dark,
                        background picker (plain / landscape / pixels)
-   4. Navigation       header, mobile menu, active link
+   4. Navigation       clean URLs (/about, /projects/<id>), header,
+                       mobile menu, active link
    5. Projects         cards, search and filters
-   6. Project dialog   details at #/projects/<id>
-   7. Contact form     validation and spam protection
+   6. Project dialog   details at /projects/<id>
+   7. Contact form     validation, spam protection, delivery
    8. Photo card       3D tilt, flip to the tagline
-   9. Start-up         reveal on scroll, run everything
+   9. Analytics        anonymous visit counts (Vercel functions in api/)
+   10. Start-up        reveal on scroll, run everything
    ========================================================= */
 (function () {
   "use strict";
@@ -2759,6 +2761,85 @@
   /* =======================================================
      4. NAVIGATION
      ======================================================= */
+  /* Clean URLs: every section and project has its own address (/about,
+     /projects/booksheaven). firebase.json serves this page for all of them,
+     and links here change the address without reloading the page. */
+  const BASE = new URL(document.baseURI).pathname;   // the site's folder (the <base> set in index.html)
+  const SECTION_TITLES = {
+    about: "About", skills: "Skills", projects: "Projects", experience: "Experience",
+    education: "Education", cv: "CV", contact: "Contact", analytics: "Site analytics"
+  };
+  const pathOf = (route) => BASE + (route === "home" ? "" : route);
+
+  function currentRoute() {
+    const rest = location.pathname.startsWith(BASE) ? location.pathname.slice(BASE.length) : "";
+    return rest.replace(/\/+$/, "") || "home";
+  }
+
+  // Title and canonical address for what is on screen
+  function setPage(route) {
+    if (!/^projects\//.test(route)) {
+      document.title = SECTION_TITLES[route] ? SECTION_TITLES[route] + " | Margie A. Marquez" : baseTitle;
+    }
+    const url = location.origin + pathOf(route);
+    $('link[rel="canonical"]').href = url;
+    $('meta[property="og:url"]').content = url;
+  }
+
+  // Show a section or project (the address is already set)
+  function showRoute(route, smooth) {
+    const project = route.match(/^projects\/([\w-]+)$/);
+    if (project && openProject(project[1])) { setPage(route); return; }
+    if (dialog.open) dialog.close();
+    const known = route === "home" || SECTION_TITLES[route];
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.getElementById(known ? route : project ? "projects" : "home")
+      .scrollIntoView({ behavior: smooth && !reduce ? "smooth" : "auto" });
+    setPage(known ? route : "home");
+  }
+
+  // Go somewhere from a link: a new address, then show it
+  function go(route) {
+    const url = pathOf(route);
+    if (url !== location.pathname) history.pushState(null, "", url);
+    showRoute(route, true);
+    track(url);
+  }
+
+  function initRoutes() {
+    // old shared links (#about, #/projects/booksheaven) become clean addresses
+    const old = location.hash.match(/^#\/?(projects\/[\w-]+|home|about|skills|projects|experience|education|cv|contact|analytics)$/);
+    if (old) history.replaceState(null, "", pathOf(old[1]));
+
+    // in-page links get the clean address of their section
+    $$('a[href^="#"]').forEach((a) => {
+      const id = a.getAttribute("href").slice(1);
+      if (id === "home" || SECTION_TITLES[id]) {
+        a.dataset.route = id;
+        a.href = pathOf(id);
+      }
+    });
+    document.addEventListener("click", (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest("a");
+      if (!a) return;
+      if (a.dataset.route) {
+        e.preventDefault();
+        go(a.dataset.route);
+        return;
+      }
+      // other "#id" links (the skip link) stay on this page rather than going to the site's folder
+      const href = a.getAttribute("href") || "";
+      const target = href.length > 1 && href.startsWith("#") && document.getElementById(href.slice(1));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView();
+        target.focus({ preventScroll: true });
+      }
+    });
+    window.addEventListener("popstate", () => showRoute(currentRoute(), true));
+  }
+
   function initNav() {
     const header = $(".site-header");
     const nav = $("#site-nav");
@@ -2783,14 +2864,20 @@
       if (now !== scrolled) header.classList.toggle("scrolled", (scrolled = now));
     }, { passive: true });
 
-    // Highlight the section in view
-    const links = new Map($$("a", nav).map((a) => [a.getAttribute("href").slice(1), a]));
+    // Highlight the section in view, and keep the address on it (without
+    // adding to the back history, and not while a project is open)
+    const links = new Map($$("a[data-route]", nav).map((a) => [a.dataset.route, a]));
     const spy = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
+        const id = entry.target.id;
         links.forEach((a) => a.classList.remove("active"));
-        const link = links.get(entry.target.id);
+        const link = links.get(id);
         if (link) link.classList.add("active");
+        if (!dialog.open && currentRoute() !== id && !/^projects\//.test(currentRoute())) {
+          history.replaceState(null, "", pathOf(id));
+          setPage(id);
+        }
       });
     }, { rootMargin: "-45% 0px -50% 0px" });
     $$("main section[id]").forEach((s) => spy.observe(s));
@@ -2818,7 +2905,7 @@
   }
 
   function projectCard(p, index) {
-    const open = () => { location.hash = "#/projects/" + p.id; };
+    const open = () => go("projects/" + p.id);
     const done = p.status.toLowerCase() === "complete";
     const statusClass = "badge status" + (done ? "" : " in-progress");
 
@@ -2831,7 +2918,7 @@
     if (p.demo) actions.push(el("a", { class: "btn btn-small", href: p.demo, target: "_blank", rel: "noopener" }, [icon("fa-solid fa-play"), "Demo"]));
 
     return el("article", { class: "project-card glass", style: `animation-delay:${index * 70}ms` }, [
-      el("a", { class: "pc-media", href: "#/projects/" + p.id, "aria-label": "View details for " + p.name }, [
+      el("a", { class: "pc-media", href: pathOf("projects/" + p.id), "data-route": "projects/" + p.id, "aria-label": "View details for " + p.name }, [
         el("img", { src: p.image, alt: p.alt, loading: "lazy", decoding: "async" }),
         el("div", { class: "pc-badges" }, [
           el("span", { class: "badge" }, [icon(CATEGORY_ICONS[p.category] || "fa-solid fa-folder"), p.category]),
@@ -2927,13 +3014,14 @@
     });
     [filters.category, filters.type, filters.tech, filters.year].forEach((s) => s.addEventListener("change", applyFilters));
     $("#project-filters").addEventListener("reset", () => setTimeout(applyFilters, 0));
+    $("#project-filters").addEventListener("submit", (e) => e.preventDefault());   // results update as you type
     $("#pm-toggle").addEventListener("click", toggleMore);
 
     applyFilters();
   }
 
   /* =======================================================
-     6. PROJECT DETAILS DIALOG — #/projects/<id>
+     6. PROJECT DETAILS DIALOG — /projects/<id>
      ======================================================= */
   const dialog = $("#project-dialog");
   const dialogBody = $("#pd-body");
@@ -2980,47 +3068,53 @@
         ? section("Links", el("div", { class: "btn-row" }, links))
         : el("p", { class: "pd-note pd-section", text: "This is a design project, so there is no live website or source code to link." }),
       el("footer", { class: "pd-footer" }, [
-        el("a", { class: "btn btn-small", href: "#/projects/" + prev.id }, [icon("fa-solid fa-arrow-left"), prev.name]),
-        el("a", { class: "btn btn-small", href: "#/projects/" + next.id }, [next.name, icon("fa-solid fa-arrow-right")])
+        el("a", { class: "btn btn-small", href: pathOf("projects/" + prev.id), "data-route": "projects/" + prev.id }, [icon("fa-solid fa-arrow-left"), prev.name]),
+        el("a", { class: "btn btn-small", href: pathOf("projects/" + next.id), "data-route": "projects/" + next.id }, [next.name, icon("fa-solid fa-arrow-right")])
       ])
     ];
   }
 
-  function route() {
-    const match = location.hash.match(/^#\/projects\/([\w-]+)$/);
-    const project = match && projects.find((p) => p.id === match[1]);
-
-    if (project) {
-      dialogBody.replaceChildren(...projectDetails(project));
-      dialogBody.scrollTop = 0;
-      document.title = project.name + " | Margie A. Marquez";
-      if (!dialog.open) {
-        dialog.showModal();
-        // the page behind is blurred out, so the landscape can rest meanwhile
-        if (sky.living) sky.living.pause();
-      }
-    } else if (dialog.open) {
-      dialog.close();
+  // Show a project's details (at /projects/<id>); false if there is no such project
+  function openProject(id) {
+    const project = projects.find((p) => p.id === id);
+    if (!project) return false;
+    dialogBody.replaceChildren(...projectDetails(project));
+    dialogBody.scrollTop = 0;
+    document.title = project.name + " | Margie A. Marquez";
+    if (!dialog.open) {
+      dialog.showModal();
+      // the page behind is blurred out, so the landscape can rest meanwhile
+      if (sky.living) sky.living.pause();
     }
+    return true;
   }
 
   function initDialog() {
     $("#pd-close").addEventListener("click", () => dialog.close());
     dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.close(); });
     dialog.addEventListener("close", () => {
-      document.title = baseTitle;
       if (sky.living && document.documentElement.dataset.bg !== "plain") sky.living.resume();
-      if (location.hash.startsWith("#/projects/")) {
-        history.replaceState(null, "", "#projects");
+      // closed by the visitor (not by going back): the address returns to /projects
+      if (/^projects\//.test(currentRoute())) {
+        history.replaceState(null, "", pathOf("projects"));
+        setPage("projects");
+        const box = $("#projects").getBoundingClientRect();
+        if (box.bottom < 0 || box.top > window.innerHeight) $("#projects").scrollIntoView();
       }
     });
-    window.addEventListener("hashchange", route);
-    route();
   }
 
   /* =======================================================
-     7. CONTACT FORM — validation & spam protection
+     7. CONTACT FORM — validation, spam protection, delivery.
+        Messages are delivered to Margie's inbox by FormSubmit
+        (free, no account). The very first message sends her an
+        "Activate form" email; after she activates it, FormSubmit
+        also offers a random alias to use below instead of the
+        address. If sending fails, the visitor's email app opens.
      ======================================================= */
+  const CONTACT_TO = "margiemarquez71@gmail.com";
+  const CONTACT_ENDPOINT = "https://formsubmit.co/ajax/" + CONTACT_TO;
+
   function initContactForm() {
     const form = $("#contact-form");
     const status = $("#form-status");
@@ -3071,15 +3165,38 @@
       }
       storage.set("contactSentAt", Date.now());
 
-      // TEMPORARY: opens the visitor's email app. Replace with a form service
-      // (e.g. Formspree or EmailJS) after deployment so messages arrive directly.
-      const body = `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`;
-      window.location.href = "mailto:margiemarquez71@gmail.com" +
-        "?subject=" + encodeURIComponent(data.subject) +
-        "&body=" + encodeURIComponent(body);
-
-      status.textContent = "Thank you! Your email app is opening so you can send the message.";
-      form.reset();
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = true;
+      status.textContent = "Sending your message...";
+      fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,          // FormSubmit uses this as the reply-to address
+          _subject: "Portfolio message: " + data.subject,
+          message: data.message,
+          _template: "table",
+          _captcha: "false"
+        })
+      })
+        .then((res) => res.json().catch(() => ({})).then((json) => {
+          if (!res.ok || String(json.success) !== "true") throw new Error(json.message || "not sent");
+        }))
+        .then(() => {
+          status.textContent = "Thank you! Your message has been sent. I'll reply to " + data.email + " soon.";
+          form.reset();
+          track("contact-sent", true);
+        })
+        .catch(() => {
+          // the service is down or not activated yet: let the visitor send it by email instead
+          const body = `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`;
+          window.location.href = "mailto:" + CONTACT_TO +
+            "?subject=" + encodeURIComponent(data.subject) +
+            "&body=" + encodeURIComponent(body);
+          status.textContent = "The message couldn't be sent directly, so your email app is opening with it instead.";
+        })
+        .finally(() => { button.disabled = false; });
     });
 
     form.addEventListener("input", (e) => e.target.removeAttribute("aria-invalid"));
@@ -3175,7 +3292,118 @@
   }
 
   /* =======================================================
-     9. REVEAL ON SCROLL & START-UP
+     9. ANALYTICS — anonymous visit counts, shown on the site
+        itself in the "Site analytics" section (/analytics).
+        The site's own Vercel functions keep the counts (api/hit.js
+        adds one, api/stats.js reads them all) in Vercel's free
+        Redis storage: pages and projects opened, CV views and
+        downloads, certificate views, contact messages, outside
+        links and device types. No cookies, no personal data.
+        Visits on localhost are not counted (set sessionStorage
+        "countLocal" to "1" to test counting there).
+     ======================================================= */
+  const API = BASE + "api/";
+  const COUNTING = !/^(localhost|127\.|\[::1\])/.test(location.hostname) ||
+    (() => { try { return sessionStorage.getItem("countLocal") === "1"; } catch (e) { return false; } })();
+
+  // Count a page view (path "/about") or an event (path "cv-download")
+  function track(path, isEvent) {
+    if (!COUNTING) return;
+    const body = JSON.stringify({ path, event: !!isEvent });
+    const sent = navigator.sendBeacon && navigator.sendBeacon(API + "hit", new Blob([body], { type: "application/json" }));
+    if (!sent) {
+      fetch(API + "hit", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true })
+        .catch(() => { /* not counted: no harm done */ });
+    }
+  }
+
+  const DEVICES = { phone: "Phone", tablet: "Tablet", desktop: "Desktop / laptop" };
+  function deviceType() {
+    if (Math.min(screen.width, screen.height) < 600) return "phone";
+    return window.matchMedia("(pointer: coarse)").matches ? "tablet" : "desktop";
+  }
+
+  const formatCount = (n) => n.toLocaleString("en-US");
+
+  // A ranked list (the top `limit` rows): name and count, with a thin bar sized against the largest
+  function renderBars(list, rows, unit, withShare, limit) {
+    const shown = rows.filter((r) => r.count > 0).sort((a, b) => b.count - a.count).slice(0, limit || rows.length);
+    if (!shown.length) {
+      list.replaceChildren(el("li", { class: "bar-empty", text: "No " + unit + " yet." }));
+      return;
+    }
+    const max = shown[0].count;
+    const total = shown.reduce((sum, r) => sum + r.count, 0);
+    list.replaceChildren(...shown.map((r) => {
+      const share = Math.round((r.count / total) * 100);
+      const fill = el("span", { class: "bar-fill" });
+      requestAnimationFrame(() => { fill.style.width = Math.max(2, (r.count / max) * 100) + "%"; });
+      return el("li", { title: `${r.label}: ${formatCount(r.count)} ${unit} (${share}%)` }, [
+        el("span", { class: "bar-label", text: r.label }),
+        el("span", { class: "bar-value" }, [formatCount(r.count), withShare ? el("small", { text: share + "%" }) : null]),
+        el("span", { class: "bar-track", "aria-hidden": "true" }, [fill])
+      ]);
+    }));
+  }
+
+  function loadStats() {
+    const status = $("#stats-status");
+    fetch(API + "stats")
+      .then((res) => {
+        if (!res.ok) throw new Error("stats " + res.status);
+        return res.json();
+      })
+      .then((stats) => {
+        const pageCount = (route) => stats.pages[pathOf(route)] || 0;
+        $$("[data-stat]").forEach((t) => {
+          const key = t.dataset.stat;
+          t.textContent = formatCount(key === "TOTAL" ? stats.total : stats.events[key] || 0);
+        });
+        renderBars($("#stats-projects"),
+          projects.map((p) => ({ label: p.name, count: pageCount("projects/" + p.id) })), "views", false);
+        renderBars($("#stats-pages"),
+          [["home", "Home"], ...Object.entries(SECTION_TITLES)].map(([route, label]) => ({ label, count: pageCount(route) })),
+          "views", false, 6);
+        renderBars($("#stats-devices"),
+          Object.entries(DEVICES).map(([key, label]) => ({ label, count: stats.events["device-" + key] || 0 })), "visitors", true);
+        status.textContent = "Live counts since November 2026, updated every minute.";
+      })
+      .catch(() => {
+        status.textContent = "The visit numbers aren't available right now. Please check back later.";
+      });
+  }
+
+  function initAnalytics() {
+    $("#analytics-note").hidden = false;
+
+    // the numbers load when the section comes near the screen
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      loadStats();
+    }, { rootMargin: "300px 0px" });
+    io.observe($("#analytics"));
+
+    // each visitor's device type, once per visit
+    try {
+      if (!sessionStorage.getItem("deviceCounted")) {
+        sessionStorage.setItem("deviceCounted", "1");
+        track("device-" + deviceType(), true);
+      }
+    } catch (e) { /* private mode: skip */ }
+
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("a[href]");
+      if (!a) return;
+      const href = a.getAttribute("href");
+      if (href.includes("assets/cv/")) track(a.hasAttribute("download") ? "cv-download" : "cv-view", true);
+      else if (href.includes("assets/certificates/")) track("certificate-view", true);
+      else if (/^https?:/.test(a.href) && a.host !== location.host) track("outbound/" + a.hostname.toLowerCase(), true);
+    });
+  }
+
+  /* =======================================================
+     10. REVEAL ON SCROLL & START-UP
      ======================================================= */
   function initReveal() {
     const items = $$(".reveal");
@@ -3198,12 +3426,22 @@
 
   initSky();
   initBackground();
+  initRoutes();
   initNav();
   initProjects();
   initDialog();
   initContactForm();
   initProfileCard();
-  // the page slides in after the intro (or straight away if there is none)
-  if (introWanted()) runIntro(initReveal);
-  else { document.documentElement.classList.remove("intro-pending"); initReveal(); }
+  initAnalytics();
+
+  // Then show the address visited (/, /about, /projects/booksheaven) and count it.
+  // The intro only plays on the home page, so shared links open straight away.
+  const startRoute = currentRoute();
+  function begin() {
+    initReveal();
+    showRoute(startRoute, false);
+    track(location.pathname);
+  }
+  if (introWanted() && startRoute === "home") runIntro(begin);
+  else { document.documentElement.classList.remove("intro-pending"); begin(); }
 })();
