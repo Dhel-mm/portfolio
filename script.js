@@ -2551,8 +2551,9 @@
       }
 
       return {
-        // Show time of day `a` blended into `b` by f, at clock hour `hour` (0-24)
-        set(a, b, f, hour) {
+        // Same call as the landscape's set(a, b, f): this scene only needs the clock hour
+        // (or, without one, the hour of time of day `a` plus f)
+        set(a, _b, f, hour) {
           state.target = typeof hour === "number" ? hour : (6 + (a + f) * 6) % 24;
           if (state.ready && reduce.matches && state.draw) state.draw(performance.now());
         },

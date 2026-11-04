@@ -66,6 +66,8 @@ If Vercel gives the project a different address, put it in `index.html` (canonic
 - **CV:** replace `assets/cv/Margie-Marquez-CV.pdf`, keeping the same name.
 - **Everything else** (about, skills, experience, education, contact) is in `index.html`.
 
+Still to fill in: the senior high school's name and years (Education), and the confirmed dates of the Experience entries.
+
 ## Contact form
 
 Messages are delivered by [FormSubmit](https://formsubmit.co) (free, no account). The first message ever sent makes FormSubmit email Margie an **Activate Form** link. Click it, and every later message goes straight to the inbox. FormSubmit then offers a random alias: you can put it in `CONTACT_ENDPOINT` in `script.js` (section 7) so the email address isn't in the code. Spam protection: a hidden honeypot field, a too-fast check and a 30-second limit between messages. If FormSubmit can't be reached, the visitor's email app opens with the message instead.

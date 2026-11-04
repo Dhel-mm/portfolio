@@ -172,11 +172,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* the live scene covers the fallback, so stop drawing it */
 :root[data-bg="landscape"] .sky.landscape-ready .sky-layer,
 :root[data-bg="pixels"] .sky.pixels-ready .sky-layer { display: none; }
-.sky-shade { z-index: 4; }
-
 .sky-shade {
   position: absolute;
   inset: 0;
+  z-index: 4;
   background: var(--shade);
   transition: background-color .8s ease;
 }
@@ -488,6 +487,7 @@ body::before {
 }
 
 .hero-side {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -510,7 +510,6 @@ body::before {
   --photo-back: linear-gradient(160deg, rgba(36, 32, 62, .96), rgba(22, 24, 46, .96));
 }
 
-.hero-side { position: relative; }
 
 .profile3d {
   position: relative;
