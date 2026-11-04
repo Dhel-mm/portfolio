@@ -1475,13 +1475,23 @@ body::before {
 
 main:focus { outline: none; }   /* focused by the skip link */
 
-.copyright {
+/* copyright on the left, the privacy note on the right (stacked on narrow screens) */
+.footer-bottom {
   grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 24px;
   padding-top: 14px;
   border-top: 1px solid var(--line);
   font-size: .8rem;
   color: var(--muted);
 }
+.footer-bottom p { margin: 0; }
+.analytics-note[hidden] { display: none; }
+.analytics-note i { color: var(--accent); margin-right: 4px; }
+.analytics-note a { color: var(--accent); font-weight: 600; white-space: nowrap; }
+.analytics-note a:hover { text-decoration: underline; }
 
 /* ---------- Sky control ---------- */
 .sky-control {
