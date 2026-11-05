@@ -2,7 +2,7 @@
 
 Personal portfolio of Margie A. Marquez, 3rd-year IT student at City College of Calamba.
 
-**Live site:** https://margie-marquez.vercel.app (Vercel, HTTPS)
+**Live site:** https://margie-marquez.web.app (Firebase Hosting, HTTPS). The visitor counts run on https://margie-marquez.vercel.app (Vercel).
 
 Plain HTML, CSS and JavaScript, no build step and no framework, plus two small Vercel functions for the visitor counts.
 
@@ -16,7 +16,7 @@ Plain HTML, CSS and JavaScript, no build step and no framework, plus two small V
 | `vercel.json` | Hosting setup: clean URLs, caching and security headers |
 | `.vercelignore` | Files kept off the public site |
 | `robots.txt`, `sitemap.xml` | For search engines |
-| `firebase.json`, `.firebaserc` | The older Firebase Hosting setup (margie-marquez.web.app), kept as a backup |
+| `firebase.json`, `.firebaserc` | Firebase Hosting setup for the live site (margie-marquez.web.app). Deploy with `firebase deploy --only hosting` |
 
 ## Pages (clean URLs)
 

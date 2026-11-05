@@ -3300,10 +3300,11 @@
         Redis storage: pages and projects opened, CV views and
         downloads, certificate views, contact messages, outside
         links and device types. No cookies, no personal data.
-        Visits on localhost are not counted (set sessionStorage
+        Firebase Hosting has no functions, so the web.app site uses
+        the same counts on Vercel. Visits on localhost are not counted (set sessionStorage
         "countLocal" to "1" to test counting there).
      ======================================================= */
-  const API = BASE + "api/";
+  const API = /(^|\.)(web\.app|firebaseapp\.com)$/.test(location.hostname) ? "https://margie-marquez.vercel.app/api/" : BASE + "api/";
   const COUNTING = !/^(localhost|127\.|\[::1\])/.test(location.hostname) ||
     (() => { try { return sessionStorage.getItem("countLocal") === "1"; } catch (e) { return false; } })();
 
@@ -3311,9 +3312,9 @@
   function track(path, isEvent) {
     if (!COUNTING) return;
     const body = JSON.stringify({ path, event: !!isEvent });
-    const sent = navigator.sendBeacon && navigator.sendBeacon(API + "hit", new Blob([body], { type: "application/json" }));
+    const sent = navigator.sendBeacon && navigator.sendBeacon(API + "hit", new Blob([body], { type: "text/plain" }));
     if (!sent) {
-      fetch(API + "hit", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true })
+      fetch(API + "hit", { method: "POST", headers: { "Content-Type": "text/plain" }, body, keepalive: true })
         .catch(() => { /* not counted: no harm done */ });
     }
   }

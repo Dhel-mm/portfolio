@@ -9,7 +9,9 @@
       ".git/**",
       "**/.*/**",
       "**/node_modules/**",
-      "assets/images/profile.webp"
+      "assets/images/profile.webp",
+      "api/**",
+      "vercel.json"
     ],
     "trailingSlash": false,
     "rewrites": [
